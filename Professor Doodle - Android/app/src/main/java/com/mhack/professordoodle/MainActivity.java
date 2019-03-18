@@ -233,7 +233,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             mCanvas = new Canvas(mBitmap);
             mCanvas.drawARGB(255, 255, 255, 255);
-            uploadCanvas();
             mw = w;
             mh = h;
         }
@@ -319,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     byte[] bytes = byteArrayOutputStream.toByteArray();
                     String base64 = "data:image/png;base64," + Base64.encodeToString(bytes, Base64.DEFAULT).replace("\n", "|");
                     try {
-                        URL url = new URL("http://192.168.43.40:2234/drawing.php");
+                        URL url = new URL(RoomActivity.serverUrl + "/drawing.php");
                         httpURLConnection = (HttpURLConnection) url.openConnection();
 //                        httpURLConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                         httpURLConnection.setReadTimeout(10000);
@@ -388,13 +387,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         void convertCanvasToImage() {
             FileOutputStream fileOutputStream = null;
-           String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/doodle" + System.currentTimeMillis() / 1000 + ".jpeg";
+            String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/doodle" + System.currentTimeMillis() / 1000 + ".jpeg";
             try {
                 fileOutputStream = new FileOutputStream(filename);
             } catch (Exception e) {
             }
-            mBitmap.compress(Bitmap.CompressFormat.JPEG, 80, fileOutputStream);
-            Toast.makeText(MainActivity.this,"Image downloaded as "+ filename, Toast.LENGTH_LONG).show();
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            Toast.makeText(MainActivity.this, "Image downloaded as " + filename, Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -417,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 HttpURLConnection httpURLConnection = null;
                 while (true) {
                     try {
-                        URL url = new URL("http://192.168.43.40:2234/drawingforandroid.php?id=" + roomId);
+                        URL url = new URL(RoomActivity.serverUrl + "/drawingforandroid.php?id=" + roomId);
                         httpURLConnection = (HttpURLConnection) url.openConnection();
                         httpURLConnection.setRequestMethod("GET");
                         httpURLConnection.setReadTimeout(10000);

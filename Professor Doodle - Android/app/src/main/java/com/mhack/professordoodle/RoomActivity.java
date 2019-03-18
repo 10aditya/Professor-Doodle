@@ -30,6 +30,8 @@ public class RoomActivity extends AppCompatActivity implements RequestCallback {
     private EditText editText;
     private String dda = "";
 
+    public static String serverUrl = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,27 @@ public class RoomActivity extends AppCompatActivity implements RequestCallback {
                 }
             }
         });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View v = LayoutInflater.from(this).inflate(R.layout.ip_address_dialog_layout, null);
+        builder.setView(v);
+        final AlertDialog alertDialog = builder.create();
+        final EditText ipEditText = v.findViewById(R.id.ip_address_edit_text);
+        final EditText portNumberEditText = v.findViewById(R.id.port_number_edit_text);
+        v.findViewById(R.id.go_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                serverUrl = "http://" + ipEditText.getText().toString() + ":" + portNumberEditText.getText().toString();
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 
     void createRoom(final RequestCallback callback) {
@@ -66,7 +89,7 @@ public class RoomActivity extends AppCompatActivity implements RequestCallback {
 
                 HttpURLConnection httpURLConnection = null;
                 try {
-                    URL url = new URL("http://192.168.43.40:2234/room.php");
+                    URL url = new URL(serverUrl + "/room.php");
                     httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("POST");
                     httpURLConnection.setReadTimeout(10000);
@@ -138,7 +161,6 @@ public class RoomActivity extends AppCompatActivity implements RequestCallback {
                 ClipData clip = ClipData.newPlainText("Room Id", dda);
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(RoomActivity.this, "Room Id Copied to Clipboard", Toast.LENGTH_LONG).show();
-                dialog.dismiss();
             }
         });
 
