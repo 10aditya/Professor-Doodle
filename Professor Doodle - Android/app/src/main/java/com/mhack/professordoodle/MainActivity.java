@@ -320,7 +320,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     try {
                         URL url = new URL(RoomActivity.serverUrl + "/drawing.php");
                         httpURLConnection = (HttpURLConnection) url.openConnection();
-//                        httpURLConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                         httpURLConnection.setReadTimeout(10000);
                         httpURLConnection.setConnectTimeout(15000);
                         httpURLConnection.setRequestMethod("POST");

@@ -123,7 +123,6 @@
             findxy('out', e)
         }, false);
 
-        uploadCanvas();
     }
 
     
@@ -237,7 +236,7 @@ function updateCanvas(x){
 }
 function download(){
         var download = document.getElementById("download");
-        var image = document.getElementById("canv").toDataURL("image/png")
+        var image = canvas.toDataURL("image/png")
                     .replace("image/png", "image/octet-stream");
         download.setAttribute("href", image);
 
